@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>YouTube Clone — Demo</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724; /* deep navy */
+      --card:#0b1220;
+      --muted:#94a3b8;
+      --accent:#ff0000;
+      --soft:#e6eef8;
+      --glass: rgba(255,255,255,0.03);
+      --radius:12px;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:linear-gradient(180deg, #071025 0%, #09121b 100%);
+      color:var(--soft);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      font-size:14px;
+    }
+
+    /* Top navbar */
+    .topbar{
+      height:64px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+      padding:0 20px;
+      position:sticky;
+      top:0;
+      z-index:40;
+      backdrop-filter: blur(6px);
+      background: rgba(6,10,16,0.45);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .logo{display:flex;align-items:center;gap:10px;font-weight:700}
+    .logo .mark{width:34px;height:24px;background:var(--accent);border-radius:4px;box-shadow:0 2px 6px rgba(255,0,0,0.08)}
+    .search{
+      display:flex;flex:1;max-width:720px;margin-left:8px;align-items:center;background:var(--card);padding:6px;border-radius:10px;gap:8px;border:1px solid rgba(255,255,255,0.02)
+    }
+    .search input{flex:1;background:transparent;border:0;color:var(--soft);outline:none;padding:8px}
+    .icon-btn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:transparent;border:0;color:var(--muted);cursor:pointer}
+
+    /* Layout */
+    .layout{display:grid;grid-template-columns:260px 1fr;gap:20px;padding:18px;}
+    @media (max-width:900px){.layout{grid-template-columns:1fr;padding:12px}}
+
+    /* Sidebar */
+    .sidebar{padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);height:calc(100vh - 120px);position:sticky;top:72px;overflow:auto}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;color:var(--muted);cursor:pointer}
+    .nav-item:hover{background:var(--glass);color:var(--soft)}
+
+    /* Main grid */
+    .content{min-height:80vh}
+    .section-title{display:flex;align-items:center;justify-content:space-between;margin:10px 0 14px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    @media (max-width:1200px){.grid{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:600px){.grid{grid-template-columns:1fr}}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border-radius:14px;padding:0;overflow:hidden;border:1px solid rgba(255,255,255,0.02)}
+    .thumb{position:relative;padding-top:56.25%;background:#0b1220;overflow:hidden}
+    .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .duration{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,0.7);padding:4px 6px;border-radius:6px;font-size:12px}
+
+    .meta{display:flex;gap:10px;padding:12px}
+    .avatar{width:36px;height:36px;border-radius:50%;background:#142135;flex:0 0 36px}
+    .mtext{flex:1}
+    .title{font-weight:600;margin:0 0 6px;color:var(--soft);font-size:14px}
+    .sub{color:var(--muted);font-size:13px}
+
+    /* Player overlay */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;padding:20px;z-index:80}
+    .player{width:100%;max-width:1100px;background:#08111a;border-radius:12px;padding:10px}
+    .player iframe{width:100%;height:620px;border:0;border-radius:8px}
+    @media (max-width:900px){.player iframe{height:360px}}
+
+    /* small utilities */
+    .muted{color:var(--muted)}
+    .btn{padding:8px 12px;border-radius:10px;border:0;background:rgba(255,255,255,0.03);color:var(--soft);cursor:pointer}
+    .load-more{display:flex;justify-content:center;margin:18px 0}
+
+    /* footer small */
+    .credits{color:var(--muted);font-size:12px;margin-top:10px;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo"><div class="mark"></div><div style="letter-spacing:0.4px">YT<span style="color:var(--muted);font-weight:500;margin-left:6px">Clone</span></div></div>
+    <div class="search" role="search">
+      <button class="icon-btn" aria-hidden>🔍</button>
+      <input id="searchInput" placeholder="Search" aria-label="Search videos" />
+      <button id="searchBtn" class="btn">Search</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-left:auto;align-items:center">
+      <button class="icon-btn" title="Create">＋</button>
+      <button class="icon-btn" title="Apps">▦</button>
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(180deg,#234,#345);display:flex;align-items:center;justify-content:center;font-weight:700">S</div>
+    </div>
+  </div>
+
+  <main class="layout">
+    <aside class="sidebar" aria-label="Main sidebar">
+      <div class="nav-item"><strong>Home</strong></div>
+      <div class="nav-item">Explore</div>
+      <div class="nav-item">Shorts</div>
+      <div class="nav-item">Subscriptions</div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.02);margin:12px 0">
+      <div class="nav-item">Library</div>
+      <div class="nav-item">History</div>
+      <div style="height:10px"></div>
+      <div class="credits">This is a demo. Thumbnails are sample images.</div>
+    </aside>
+
+    <section class="content">
+      <div class="section-title">
+        <h2 style="margin:0">Recommended</h2>
+        <div class="muted">Showing <span id="resultCount"></span> results</div>
+      </div>
+
+      <div id="grid" class="grid" aria-live="polite"></div>
+
+      <div class="load-more"><button id="loadMore" class="btn">Load more</button></div>
+    </section>
+  </main>
+
+  <!-- Player overlay -->
+  <div id="overlay" class="overlay" role="dialog" aria-hidden="true">
+    <div class="player" role="document">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px">
+        <div id="playerTitle" style="font-weight:700"></div>
+        <button id="closePlayer" class="btn">Close</button>
+      </div>
+      <iframe id="playerIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script>
+    // Simple demo dataset
+    const VIDEOS = [
+      {id:'M7lc1UVf-VE', title:'YouTube API Demo: Quick Start', channel:'Google Developers', views:'1.2M', time:'2 days ago', duration:'3:45', thumb:'https://i.ytimg.com/vi/M7lc1UVf-VE/hqdefault.jpg'},
+      {id:'YE7VzlLtp-4', title:'Relaxing Piano Music - Sleep Music', channel:'PeacefulRelax', views:'12M', time:'1 year ago', duration:'1:02:12', thumb:'https://i.ytimg.com/vi/YE7VzlLtp-4/hqdefault.jpg'},
+      {id:'kXYiU_JCYtU', title:'Linkin Park - What I've Done (Official Music Video)', channel:'LinkinParkVEVO', views:'1.1B', time:'12 years ago', duration:'3:25', thumb:'https://i.ytimg.com/vi/kXYiU_JCYtU/hqdefault.jpg'},
+      {id:'dQw4w9WgXcQ', title:'Never Gonna Give You Up', channel:'RickAstleyVEVO', views:'1.2B', time:'14 years ago', duration:'3:33', thumb:'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg'},
+      {id:'sBws8MSXN7A', title:'CSS Grid in 5 minutes', channel:'Frontend Simplified', views:'321K', time:'6 months ago', duration:'5:12', thumb:'https://i.ytimg.com/vi/sBws8MSXN7A/hqdefault.jpg'},
+      {id:'hT_nvWreIhg', title:'Coldplay - Viva La Vida', channel:'Coldplay', views:'2.3B', time:'15 years ago', duration:'4:02', thumb:'https://i.ytimg.com/vi/hT_nvWreIhg/hqdefault.jpg'},
+      {id:'e-ORhEE9VVg', title:'Taylor Swift - Blank Space', channel:'TaylorSwiftVEVO', views:'3.2B', time:'9 years ago', duration:'4:33', thumb:'https://i.ytimg.com/vi/e-ORhEE9VVg/hqdefault.jpg'},
+      {id:'VbfpW0pbvaU', title:'Maroon 5 - Sugar', channel:'Maroon5VEVO', views:'3.4B', time:'8 years ago', duration:'5:01', thumb:'https://i.ytimg.com/vi/VbfpW0pbvaU/hqdefault.jpg'}
+    ];
+
+    let shown = 6; // how many to show initially
+    const grid = document.getElementById('grid');
+    const resultCount = document.getElementById('resultCount');
+    const overlay = document.getElementById('overlay');
+    const playerIframe = document.getElementById('playerIframe');
+    const playerTitle = document.getElementById('playerTitle');
+
+    function renderVideos(list){
+      grid.innerHTML = '';
+      const slice = list.slice(0, shown);
+      slice.forEach(v=>{
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="thumb" role="button" tabindex="0" data-id="${v.id}" aria-label="Play ${escapeHtml(v.title)}">
+            <img loading="lazy" src="${v.thumb}" alt="${escapeHtml(v.title)} thumbnail">
+            <div class="duration">${v.duration}</div>
+          </div>
+          <div class="meta">
+            <div class="avatar" aria-hidden></div>
+            <div class="mtext">
+              <div class="title">${escapeHtml(v.title)}</div>
+              <div class="sub">${escapeHtml(v.channel)} • ${v.views} views • ${v.time}</div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+
+        // attach click handler to thumbnail
+        const thumb = card.querySelector('.thumb');
+        thumb.addEventListener('click', ()=>openPlayer(v));
+        thumb.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') openPlayer(v) });
+      });
+      resultCount.textContent = list.length;
+    }
+
+    function openPlayer(video){
+      playerTitle.textContent = video.title + ' — ' + video.channel;
+      // embed as YouTube iframe (works if online)
+      playerIframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1`;
+      overlay.style.display = 'flex';
+      overlay.setAttribute('aria-hidden','false');
+    }
+    document.getElementById('closePlayer').addEventListener('click', closePlayer);
+    overlay.addEventListener('click', function(e){ if(e.target === overlay) closePlayer(); });
+    function closePlayer(){ overlay.style.display='none'; overlay.setAttribute('aria-hidden','true'); playerIframe.src = '' }
+
+    // simple load more
+    document.getElementById('loadMore').addEventListener('click', ()=>{ shown = Math.min(VIDEOS.length, shown + 4); renderVideos(filtered); });
+
+    // search filtering
+    const input = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    let filtered = VIDEOS.slice();
+    function doSearch(){
+      const q = input.value.trim().toLowerCase();
+      if(!q){ filtered = VIDEOS.slice() } else {
+        filtered = VIDEOS.filter(v => v.title.toLowerCase().includes(q) || v.channel.toLowerCase().includes(q));
+      }
+      shown = 6;
+      renderVideos(filtered);
+    }
+    searchBtn.addEventListener('click', doSearch);
+    input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter')

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sejal Pandey | Portfolio</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body{
+            background:#7898e1;
+            color:#fff;
+        }
+
+        header{
+            height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-align:center;
+            background:linear-gradient(135deg,#999ae5,#22d3ee);
+        }
+
+        header h1{
+            font-size:3rem;
+        }
+
+        header span{
+            color:#0f172a;
+            font-weight:700;
+        }
+
+        header p{
+            margin:15px 0;
+            font-size:1.2rem;
+        }
+
+        .btn{
+            display:inline-block;
+            margin-top:20px;
+            padding:12px 30px;
+            background:#0f172a;
+            color:white;
+            text-decoration:none;
+            border-radius:30px;
+            transition:0.3s;
+        }
+
+        .btn:hover{
+            background:white;
+            color:#0f172a;
+        }
+
+        section{
+            padding:80px 10%;
+            
+        }
+
+        h2{
+            text-align:center;
+            font-size:2.5rem;
+            margin-bottom:40px;
+            color:#22d3ee;
+            /* text-shadow: 9x 5px #999ae5; */
+            text-shadow: 9px 5px 4px red;
+
+            
+        }
+
+        .about{
+            text-align:center;
+            max-width:800px;
+            margin:auto;
+            line-height:1.8;
+            
+        
+        }
+
+        .skills{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+            gap:20px;
+        }
+
+        .card{
+            background:#1e293b;
+            padding:25px;
+            border-radius:15px;
+            text-align:center;
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-10px);
+            background:#334155;
+        }
+
+        .projects{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:20px;
+        }
+
+        footer{
+            background:#020617;
+            padding:20px;
+            text-align:center;
+            color:#94a3b8;
+        }
+
+        @media(max-width:768px){
+            header h1{
+                font-size:2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HERO SECTION -->
+<header>
+    <div>
+        <h1>Hello, I'm <span>Sejal Pandey</span></h1>
+        <p>BCA Student | Web Developer | Programmer</p>
+        <a href="#projects" class="btn">View My Work</a>
+    </div>
+</header>
+
+<!-- ABOUT -->
+<section>
+    <h2>About Me</h2>
+    <p class="about">
+        I am a passionate BCA 2nd year student with strong interest in Web Development 
+        and Programming. I have hands-on experience with HTML, CSS, Python, C, C++ 
+        and basic Java. I love building clean, user-friendly websites and learning 
+        new technologies.
+    </p>
+</section>
+
+<!-- SKILLS -->
+<section>
+    <h2>My Skills</h2>
+    <div class="skills">
+        <div class="card">HTML5</div>
+        <div class="card">CSS3</div>
+        <div class="card">JavaScript</div>
+        <div class="card">Python</div>
+        <div class="card">C / C++</div>
+        <div class="card">Java (Basic)</div>
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+    <h2>Projects</h2>
+    <div class="projects">
+        <div class="card">
+            <h3>Portfolio Website</h3>
+            <p>Personal responsive portfolio using HTML & CSS</p>
+        </div>
+        <div class="card">
+            <h3>Calculator</h3>
+            <p>Calculator using C language with loop</p>
+        </div>
+        <div class="card">
+            <h3>Login Page</h3>
+            <p>Simple login UI using HTML & CSS</p>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section>
+    <h2>Contact Me</h2>
+    <div class="about">
+        <p > Email: <a href="Email" >sejalpandeysejal80@.com</p></a>
+        <p>naukri: <a href="naukri"></a></p>
+        <p>LinkedIn: <a href="linkedIn"> sejalpandeylinkedin.com</a></p>
+    </div>
+</section>
+
+<footer>
+    © 2026 Sejal Pandey | All Rights Reserved
+</footer>
+
+</body>
+</html>
